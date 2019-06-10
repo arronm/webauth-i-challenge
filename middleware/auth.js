@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 
-const db = require('../users/users-model');
-const errorRef = require('../middleware/errorRef');
+const db = require('../data/users-model');
+const errorRef = require('../helpers/errorRef');
 
 const auth = (req, res, next) => {
   const { username, password } = req.headers;

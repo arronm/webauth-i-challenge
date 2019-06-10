@@ -5,6 +5,7 @@ const cors = require('cors');
 const PORT = process.env.PORT || 4444;
 const authRouter = require('./routers/auth');
 const userRouter = require('./routers/users');
+const secretRouter = require('./routers/secret');
 
 const middleware = [
   helmet(),
@@ -23,5 +24,6 @@ server.get('/', (req, res) => {
 
 server.use('/api/auth', authRouter);
 server.use('/api/users', userRouter);
+server.use('/api/secret', secretRouter);
 
 server.listen(PORT, () => console.log(`Server listening on ${PORT}`));
