@@ -9,12 +9,6 @@ const authRouter = require('./routers/auth');
 const userRouter = require('./routers/users');
 const secretRouter = require('./routers/secret');
 
-const middleware = [
-  helmet(),
-  cors(),
-  express.json(),
-];
-
 const sessionConfig = {
   name: 'ucsid',
   secret: 'purple unicorn rainbow farts',
@@ -34,9 +28,18 @@ const sessionConfig = {
   }),
 };
 
+const middleware = [
+  helmet(),
+  cors({
+    credentials: true,
+    origin: 'http://localhost:3000'
+  }),
+  express.json(),
+  session(sessionConfig),
+];
+
 const server = express();
 server.use(middleware);
-server.use(session(sessionConfig));
 
 server.get('/', (req, res) => {
   res.json({

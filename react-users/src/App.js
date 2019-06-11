@@ -7,7 +7,7 @@ import AuthForm from './AuthForm';
 
 const App = () => {
   const [state, setState] = useState({
-    users: {},
+    users: [],
     loggedIn: false,
   });
 
@@ -25,9 +25,10 @@ const App = () => {
   const handleLogin = async (credentials) => {
     // handle login
     try {
-      const response = await axios.post('http://localhost:4444/api/auth/login', credentials);
+      const response = await axios.post('http://localhost:4444/api/auth/login', credentials, { withCredentials: true });
       
       if (response) {
+        console.log(response);
         localStorage.setItem('user', credentials.username);
         setState({
           ...state,
@@ -39,13 +40,57 @@ const App = () => {
     }
   }
 
+  const handleLogout = async () => {
+    try {
+      const response = await axios.delete('http://localhost:4444/api/auth/logout');
+      if (response) {
+        console.log('logged out')
+        localStorage.removeItem('user');
+        setState({
+          users: [],
+          loggedIn: false,
+        });
+      } else {
+        console.log('You should not hit this, ever (in theory)');
+      }
+    } catch (error) {
+      console.log('error :', error);
+    }
+  }
+
+  const getUsers = async () => {
+   try {
+    console.log('getting users');
+    const users = await axios.get('http://localhost:4444/api/users', {
+      withCredentials: true,
+    });
+
+    if (users) {
+      console.log(users);
+      setState({
+        ...state,
+        users,
+      });
+    }
+   } catch (error) {
+     console.log('error :', error);
+   }
+  }
+
   return (
     <div className="App">
+      <nav className="navigation">
+        {
+          !state.loggedIn
+            ? <span></span>
+            : <span onClick={handleLogout}>Log Out</span>
+        }
+      </nav>
       <header className="App-header">
         {
           !state.loggedIn
             ? <AuthForm handleLogin={handleLogin} />
-            : <span>Kgo</span>
+            : <Users getUsers={getUsers} users={state.users} />
         }
       </header>
     </div>
