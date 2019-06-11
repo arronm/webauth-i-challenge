@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const session = require('express-session');
+const knexSession = require('connect-session-knex')(session);
 
 const PORT = process.env.PORT || 4444;
 const authRouter = require('./routers/auth');
@@ -24,6 +25,13 @@ const sessionConfig = {
     secure: false,
     httpOnly: true,
   },
+  store: new knexSession({
+    knex: require('./data/dbConfig'),
+    tablename: 'session',
+    sidfieldname: 'sid',
+    createtable: true,
+    clearInterval: 1000 * 60 * 60,
+  }),
 };
 
 const server = express();
