@@ -47,4 +47,13 @@ router.post('/login', (req, res) => {
     });
 });
 
+router.delete('/logout', (req, res) => {
+  if (req.session && req.session.username) {
+    req.session.destroy();
+  }
+  res.json({
+    message: 'You have been logged out.',
+  });
+});
+
 module.exports = router;
