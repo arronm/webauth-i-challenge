@@ -1,17 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import Users from './Users';
+import AuthForm from './AuthForm';
 
-function App() {
-  const [users, setUsers] = useState({ users: {} });
+const App = () => {
+  const [state, setState] = useState({
+    users: {},
+    loggedIn: false,
+  });
 
   useEffect(() => {
+    const user = localStorage.getItem('user') || false;
+    
+    if (user) {
+      setState({
+        ...state,
+        loggedIn: true,
+      });
+    }
+  }, [state]);
 
-  });
+  const handleLogin = (credentials) => {
+    // handle login
+    console.log('creds', credentials);
+  }
 
   return (
     <div className="App">
       <header className="App-header">
-        Welcome User
+        {
+          !state.loggedIn
+            ? <AuthForm handleLogin={handleLogin} />
+            : <span>Kgo</span>
+        }
       </header>
     </div>
   );
