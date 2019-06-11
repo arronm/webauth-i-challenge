@@ -68,8 +68,13 @@ const App = () => {
         users,
       });
     }
-   } catch (error) {
+  } catch (error) {
      console.log('error :', error);
+     setState({
+       users: [],
+       loggedIn: false,
+     });
+     localStorage.removeItem('user');
    }
   }
 
