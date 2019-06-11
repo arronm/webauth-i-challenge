@@ -1,6 +1,7 @@
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
+const session = require('express-session');
 
 const PORT = process.env.PORT || 4444;
 const authRouter = require('./routers/auth');
@@ -13,8 +14,21 @@ const middleware = [
   express.json(),
 ];
 
+const sessionConfig = {
+  name: 'ucsid',
+  secret: 'purple unicorn rainbow farts',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 1000 * 600,
+    secure: false,
+    httpOnly: true,
+  },
+};
+
 const server = express();
 server.use(middleware);
+server.use(session(sessionConfig));
 
 server.get('/', (req, res) => {
   res.json({
