@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import './App.css';
 import Users from './Users';
 import AuthForm from './AuthForm';
@@ -20,9 +22,21 @@ const App = () => {
     }
   }, [state]);
 
-  const handleLogin = (credentials) => {
+  const handleLogin = async (credentials) => {
     // handle login
-    console.log('creds', credentials);
+    try {
+      const response = await axios.post('http://localhost:4444/api/auth/login', credentials);
+      
+      if (response) {
+        localStorage.setItem('user', credentials.username);
+        setState({
+          ...state,
+          loggedIn: true,
+        });
+      }
+    } catch (error) {
+      console.log('error :', error);
+    }
   }
 
   return (
