@@ -11,16 +11,16 @@ const App = () => {
     loggedIn: false,
   });
 
+  
   useEffect(() => {
     const user = localStorage.getItem('user') || false;
-    
     if (user) {
       setState({
         ...state,
         loggedIn: true,
       });
     }
-  }, [state]);
+  }, []);
 
   const handleLogin = async (credentials) => {
     // handle login
@@ -28,7 +28,6 @@ const App = () => {
       const response = await axios.post('http://localhost:4444/api/auth/login', credentials, { withCredentials: true });
       
       if (response) {
-        console.log(response);
         localStorage.setItem('user', credentials.username);
         setState({
           ...state,
@@ -44,7 +43,6 @@ const App = () => {
     try {
       const response = await axios.delete('http://localhost:4444/api/auth/logout');
       if (response) {
-        console.log('logged out')
         localStorage.removeItem('user');
         setState({
           users: [],
@@ -60,13 +58,11 @@ const App = () => {
 
   const getUsers = async () => {
    try {
-    console.log('getting users');
-    const users = await axios.get('http://localhost:4444/api/users', {
+    const { data: users } = await axios.get('http://localhost:4444/api/users', {
       withCredentials: true,
     });
 
     if (users) {
-      console.log(users);
       setState({
         ...state,
         users,

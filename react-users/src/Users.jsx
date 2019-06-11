@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 
 const Users = (props) => {
+  const { users, getUsers } = props;
   useEffect(() => {
-    if (!props.users.length) {
-      props.getUsers();
-    } else {
-      console.log(props.users);
+    if (!users.length) {
+      getUsers();
     }
-  }, []);
-  return props.users.map(user => <div>{user.username}</div>)
+  }, [users, getUsers]);
+  return props.users.map(user => <div key={users.id || 0}>{user.username}</div>)
 }
  
 export default Users;
